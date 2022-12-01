@@ -1,16 +1,16 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
-	"bufio"
-	"strconv"
 	"sort"
+	"strconv"
 )
 
 func check(e error) {
 	if e != nil {
-		panic(e)		// skip error handling
+		panic(e) // skip error handling
 	}
 }
 
@@ -35,7 +35,7 @@ func readElfCounts(filename string) []int {
 		check(err)
 		currentElf += calories
 	}
-	elves = append(elves, currentElf)	// last block has no trailing blank line
+	elves = append(elves, currentElf) // last block has no trailing blank line
 
 	return elves
 }
