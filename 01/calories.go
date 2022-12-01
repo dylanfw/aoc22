@@ -40,9 +40,18 @@ func readElfCounts(filename string) []int {
 	return elves
 }
 
+func sum(ints []int) int {
+	var total int
+	for _, n := range ints {
+		total += n
+	}
+	return total
+}
+
 func main() {
 	elves := readElfCounts("input.txt")
 	sort.Sort(sort.Reverse(sort.IntSlice(elves)))
 
 	fmt.Println("(Part 1) Most Calories Held by an Elf:", elves[0])
+	fmt.Println("(Part 2) Calories Held by Top 3 Elves:", sum(elves[0:3]))
 }
