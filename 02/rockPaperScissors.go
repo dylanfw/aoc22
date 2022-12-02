@@ -10,10 +10,9 @@ import (
 type Shape string
 
 const (
-	Unknown  Shape = "Unknown"
-	Rock           = "Rock"
-	Paper          = "Paper"
-	Scissors       = "Scissors"
+	Rock     = "Rock"
+	Paper    = "Paper"
+	Scissors = "Scissors"
 )
 
 type Round struct {
@@ -32,10 +31,18 @@ func translateShapeCode(shapeCode string) Shape {
 		"A": Rock,
 		"B": Paper,
 		"C": Scissors,
-		"X": Rock,
-		"Y": Paper,
-		"Z": Scissors,
+		"X": Rock,     // Used for Part 1 Only
+		"Y": Paper,    // Used for Part 1 Only
+		"Z": Scissors, // Used for Part 1 Only
 	}[shapeCode]
+}
+
+func translateOutcomeCode(opponentShape Shape, outcomeCode string) Shape {
+	return map[string]map[Shape]Shape{
+		"X": {Rock: Scissors, Paper: Rock, Scissors: Paper},
+		"Y": {Rock: Rock, Paper: Paper, Scissors: Scissors},
+		"Z": {Rock: Paper, Paper: Scissors, Scissors: Rock},
+	}[outcomeCode][opponentShape]
 }
 
 func scoreRound(round Round) int {
@@ -76,9 +83,14 @@ func readStrategyGuide(filename string) []Round {
 	for scanner.Scan() {
 		line := scanner.Text()
 		shapeCodes := strings.Split(line, " ")
+
+		opponentShape := translateShapeCode(shapeCodes[0])
+		// selfShape := translateShapeCode(shapeCodes[1]) 				// Part 1
+		selfShape := translateOutcomeCode(opponentShape, shapeCodes[1]) // Part 2
+
 		rounds = append(rounds, Round{
-			opponentShape: translateShapeCode(shapeCodes[0]),
-			selfShape:     translateShapeCode(shapeCodes[1]),
+			opponentShape: opponentShape,
+			selfShape:     selfShape,
 		})
 	}
 
@@ -87,5 +99,5 @@ func readStrategyGuide(filename string) []Round {
 
 func main() {
 	rounds := readStrategyGuide("input.txt")
-	fmt.Println("(Part 1) Total Game Score:", scoreGame(rounds))
+	fmt.Println("Total Game Score:", scoreGame(rounds))
 }
